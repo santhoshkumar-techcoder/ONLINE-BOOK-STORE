@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Book Store - Django AI Powered Web App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --primary: #6366f1;
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+            --accent: #38bdf8;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: 
+                radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 85% 80%, rgba(236, 72, 153, 0.15) 0%, transparent 40%);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        header {
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            backdrop-filter: blur(12px);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .repo-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .repo-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        main {
+            flex: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+            width: 100%;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 9999px;
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: #818cf8;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 1.25rem;
+        }
+
+        .hero h1 span {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+        }
+
+        .notice-card {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 3rem;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .notice-card i {
+            color: #f59e0b;
+            font-size: 1.5rem;
+            margin-top: 0.2rem;
+        }
+
+        .notice-content h3 {
+            color: #fbbf24;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .notice-content p {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3.5rem;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 1.75rem;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(99, 102, 241, 0.4);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 0.75rem;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 0.925rem;
+            line-height: 1.5;
+        }
+
+        .code-box {
+            background: #020617;
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 1.75rem;
+            margin-bottom: 3rem;
+        }
+
+        .code-box h3 {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .code-block {
+            background: #0f172a;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: monospace;
+            color: #38bdf8;
+            font-size: 0.95rem;
+            overflow-x: auto;
+            margin-bottom: 0.75rem;
+        }
+
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 1.5rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 640px) {
+            .hero h1 { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-book-open"></i> Online Book Store
+        </div>
+        <a href="https://github.com/santhoshkumar-techcoder/ONLINE-BOOK-STORE" class="repo-btn" target="_blank">
+            <i class="fa-brands fa-github"></i> GitHub Repository
+        </a>
+    </header>
+
+    <main>
+        <section class="hero">
+            <span class="badge"><i class="fa-solid fa-code-branch"></i> Django 5 / Python Full-Stack App</span>
+            <h1>Interactive <span>AI-Powered</span> Book Store</h1>
+            <p>A full-stack Django e-commerce platform with dynamic book filtering, interactive shopping cart, custom collections, and AI summary generation.</p>
+        </section>
+
+        <div class="notice-card">
+            <i class="fa-solid fa-circle-info"></i>
+            <div class="notice-content">
+                <h3>Why GitHub Pages shows a 404 for Python Backends</h3>
+                <p>GitHub Pages hosts static HTML/CSS files only. Because this application is built with <strong>Django (Python backend + SQLite database)</strong>, it requires a Python server (such as Render or PythonAnywhere) to run the dynamic server code.</p>
+            </div>
+        </div>
+
+        <section class="code-box">
+            <h3><i class="fa-solid fa-terminal" style="color: #6366f1;"></i> Quick Local Start Instructions</h3>
+            <p style="color: var(--text-muted); margin-bottom: 1rem;">Run the following commands in your terminal to start the live web application on your machine:</p>
+            
+            <div class="code-block">git clone https://github.com/santhoshkumar-techcoder/ONLINE-BOOK-STORE.git</div>
+            <div class="code-block">cd ONLINE-BOOK-STORE</div>
+            <div class="code-block">python -m venv .venv && .venv\Scripts\activate</div>
+            <div class="code-block">pip install -r requirements.txt</div>
+            <div class="code-block">python manage.py runserver</div>
+            
+            <p style="color: #38bdf8; font-size: 0.9rem; margin-top: 0.5rem;"><i class="fa-solid fa-globe"></i> Open <strong>http://127.0.0.1:8000</strong> in your browser to view the application!</p>
+        </section>
+
+        <section class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-robot"></i></div>
+                <h3>AI Summary Generator</h3>
+                <p>Generates instant AI summaries and key insights for books using Google Gemini API integration.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+                <h3>Dynamic Shopping Cart</h3>
+                <p>Full AJAX-powered shopping cart management, item updates, quantity controls, and checkout flow.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-layer-group"></i></div>
+                <h3>Curated Book Catalog</h3>
+                <p>Categories for Fiction, Non-Fiction, Sci-Fi, Audiobooks, Best Sellers, and New Arrivals.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        &copy; 2026 Online Book Store • Built with Python, Django & AI
+    </footer>
+</body>
+</html>
