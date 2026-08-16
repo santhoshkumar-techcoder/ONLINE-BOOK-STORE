@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Online Book Store | The Midnight Literary Sanctuary{% endblock %}
+
+{% block content %}
+    <!-- Hero Header -->
+    <header class="hero-section text-center">
+        <div class="container py-4">
+            <span class="hero-subtitle mb-2 d-inline-block"><i class="fa-solid fa-sparkles me-2 text-warning"></i>Welcome to Online Book Store</span>
+            <h1 class="display-3 fw-bold text-white mb-3 font-serif">Unveil the Soul of Every Book</h1>
+            <p class="lead text-white-50 mx-auto mb-4" style="max-width: 650px;">
+                Immerse yourself in a luxurious dark library experience with curated categories, audio adaptations, and instant **AI-powered summaries** driven by Google Gemini API.
+            </p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="#explore" class="btn btn-indigo px-4 py-2"><i class="fa-solid fa-compass me-2"></i>Explore Sanctuary</a>
+                <a href="{% url 'store:book_list' %}" class="btn btn-gold px-4 py-2"><i class="fa-solid fa-list-ul me-2"></i>Full Catalog</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Category Pill Carousel Section -->
+    <section class="container mb-5 text-center" id="explore">
+        <h4 class="font-serif text-white mb-4 text-center">Select Your Literary Dimension</h4>
+        <div class="d-flex flex-wrap justify-content-center gap-2">
+            <a href="{% url 'store:book_list' %}" class="category-pill active">All Dimensions</a>
+            {% for cat in categories %}
+                <a href="{% url 'store:book_list_by_category' cat.slug %}" class="category-pill">
+                    {{ cat.name }}
+                </a>
+            {% empty %}
+                <!-- Placeholders if no categories entered yet -->
+                <a href="{% url 'store:book_list' %}?q=fiction" class="category-pill">Fiction</a>
+                <a href="{% url 'store:book_list' %}?q=tech" class="category-pill">Technology</a>
+                <a href="{% url 'store:book_list' %}?q=edu" class="category-pill">Education</a>
+                <a href="{% url 'store:book_list' %}?q=bio" class="category-pill">Biography</a>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Main Dynamic Showcase Grid -->
+    <div class="container my-5">
+        
+        <!-- Featured Carousel (Best Sellers) -->
+        <section class="mb-5">
+            <div class="d-flex justify-content-between align-items-end mb-4 border-bottom border-secondary pb-3 opacity-90">
+                <div>
+                    <h2 class="font-serif text-white mb-1"><i class="fa-solid fa-crown text-warning me-2 fs-4"></i>Best Sellers</h2>
+                    <p class="text-muted small mb-0">Critically acclaimed masterpieces and crowd favorites.</p>
+                </div>
+                <a href="{% url 'store:book_list' %}" class="text-indigo text-decoration-none small fw-semibold">View All <i class="fa-solid fa-chevron-right ms-1"></i></a>
+            </div>
+            
+            <div class="row g-4">
+                {% for book in best_sellers %}
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="glass-card h-100 d-flex flex-column p-3">
+                            <a href="{% url 'store:book_detail' book.slug %}" class="text-decoration-none mb-3">
+                                <div class="book-cover-wrapper">
+                                    {% if book.cover_url %}
+                                        <img src="{{ book.cover_url }}" alt="{{ book.title }}" class="book-cover-image">
+                                    {% else %}
+                                        <div class="book-cover-fallback">
+                                            <span class="book-cover-fallback-title">{{ book.title }}</span>
+                                            <span class="book-cover-fallback-author">By {{ book.author }}</span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </a>
+                            <h5 class="text-white fs-6 mb-1 text-truncate font-serif"><a href="{% url 'store:book_detail' book.slug %}" class="text-white text-decoration-none">{{ book.title }}</a></h5>
+                            <p class="text-muted small mb-2 text-truncate">By {{ book.author }}</p>
+                            <div class="d-flex justify-content-between align-items-center mt-auto">
+                                <span class="fw-bold text-white fs-5">${{ book.price }}</span>
+                                <a href="{% url 'store:book_detail' book.slug %}" class="btn btn-gold btn-sm"><i class="fa-solid fa-eye me-1"></i> Details</a>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="col-12 text-center py-5">
+                        <div class="glass-card py-5 px-4 text-muted">
+                            <i class="fa-solid fa-box-open fs-1 mb-3 text-white-20"></i>
+                            <h5>No Best Sellers Yet</h5>
+                            <p class="small mb-0">Log in to the Django Admin panel to set books as Best Sellers!</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Featured (New Arrivals) -->
+        <section class="mb-5">
+            <div class="d-flex justify-content-between align-items-end mb-4 border-bottom border-secondary pb-3 opacity-90">
+                <div>
+                    <h2 class="font-serif text-white mb-1"><i class="fa-solid fa-hourglass-start text-info me-2 fs-4"></i>New Arrivals</h2>
+                    <p class="text-muted small mb-0">Fresh releases that just entered the sanctuary libraries.</p>
+                </div>
+                <a href="{% url 'store:book_list' %}" class="text-indigo text-decoration-none small fw-semibold">View All <i class="fa-solid fa-chevron-right ms-1"></i></a>
+            </div>
+
+            <div class="row g-4">
+                {% for book in new_arrivals %}
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="glass-card h-100 d-flex flex-column p-3">
+                            <a href="{% url 'store:book_detail' book.slug %}" class="text-decoration-none mb-3">
+                                <div class="book-cover-wrapper">
+                                    {% if book.cover_url %}
+                                        <img src="{{ book.cover_url }}" alt="{{ book.title }}" class="book-cover-image">
+                                    {% else %}
+                                        <div class="book-cover-fallback">
+                                            <span class="book-cover-fallback-title">{{ book.title }}</span>
+                                            <span class="book-cover-fallback-author">By {{ book.author }}</span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </a>
+                            <h5 class="text-white fs-6 mb-1 text-truncate font-serif"><a href="{% url 'store:book_detail' book.slug %}" class="text-white text-decoration-none">{{ book.title }}</a></h5>
+                            <p class="text-muted small mb-2 text-truncate">By {{ book.author }}</p>
+                            <div class="d-flex justify-content-between align-items-center mt-auto">
+                                <span class="fw-bold text-white fs-5">${{ book.price }}</span>
+                                <a href="{% url 'store:book_detail' book.slug %}" class="btn btn-gold btn-sm"><i class="fa-solid fa-eye me-1"></i> Details</a>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="col-12 text-center py-5">
+                        <div class="glass-card py-5 px-4 text-muted">
+                            <i class="fa-solid fa-box-open fs-1 mb-3 text-white-20"></i>
+                            <h5>No New Arrivals Yet</h5>
+                            <p class="small mb-0">Log in to the Django Admin panel to set books as New Arrivals!</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Audiobook Section (Optional Feature Showcase) -->
+        <section class="mb-5">
+            <div class="d-flex justify-content-between align-items-end mb-4 border-bottom border-secondary pb-3 opacity-90">
+                <div>
+                    <h2 class="font-serif text-white mb-1"><i class="fa-solid fa-headphones text-primary me-2 fs-4"></i>Audiobook Dimensions</h2>
+                    <p class="text-muted small mb-0">Immersive audio formats with interactive commentary previews.</p>
+                </div>
+                <a href="{% url 'store:book_list' %}?q=audiobook" class="text-indigo text-decoration-none small fw-semibold">View All <i class="fa-solid fa-chevron-right ms-1"></i></a>
+            </div>
+
+            <div class="row g-4">
+                {% for book in audiobooks %}
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="glass-card h-100 d-flex flex-column p-3">
+                            <a href="{% url 'store:book_detail' book.slug %}" class="text-decoration-none mb-3">
+                                <div class="book-cover-wrapper">
+                                    {% if book.cover_url %}
+                                        <img src="{{ book.cover_url }}" alt="{{ book.title }}" class="book-cover-image">
+                                    {% else %}
+                                        <div class="book-cover-fallback">
+                                            <span class="book-cover-fallback-title">{{ book.title }}</span>
+                                            <span class="book-cover-fallback-author">By {{ book.author }}</span>
+                                        </div>
+                                    {% endif %}
+                                    <div class="position-absolute bottom-0 end-0 m-2">
+                                        <span class="badge bg-dark border border-secondary text-info d-flex align-items-center gap-1 rounded-circle p-2">
+                                            <i class="fa-solid fa-headphones"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </a>
+                            <h5 class="text-white fs-6 mb-1 text-truncate font-serif"><a href="{% url 'store:book_detail' book.slug %}" class="text-white text-decoration-none">{{ book.title }}</a></h5>
+                            <p class="text-muted small mb-2 text-truncate">By {{ book.author }}</p>
+                            <div class="d-flex justify-content-between align-items-center mt-auto">
+                                <span class="fw-bold text-white fs-5">${{ book.price }}</span>
+                                <a href="{% url 'store:book_detail' book.slug %}" class="btn btn-indigo btn-sm"><i class="fa-solid fa-headphones me-1"></i> Listen</a>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="col-12 text-center py-5">
+                        <div class="glass-card py-5 px-4 text-muted">
+                            <i class="fa-solid fa-box-open fs-1 mb-3 text-white-20"></i>
+                            <h5>No Audiobooks Yet</h5>
+                            <p class="small mb-0">Create books in the Django Admin and flag them as Audiobooks!</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+    </div>
+{% endblock %}

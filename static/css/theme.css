@@ -1,0 +1,320 @@
+/* ==========================================================================
+   Midnight Library Premium CSS - Online Book Store
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+
+:root {
+    --bg-dark: #090b11;
+    --bg-card: rgba(18, 22, 35, 0.75);
+    --bg-card-hover: rgba(26, 32, 53, 0.9);
+    --border-glass: rgba(255, 255, 255, 0.07);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    
+    /* Elegant Accent Gradients */
+    --accent-gold-start: #d4af37;
+    --accent-gold-end: #f3e5ab;
+    --accent-primary-start: #6366f1;
+    --accent-primary-end: #8b5cf6;
+    
+    --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6, .font-serif {
+    font-family: 'Playfair Display', serif;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-dark);
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* Glassmorphism Navbar */
+.navbar-custom {
+    background: rgba(9, 11, 17, 0.8) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-glass);
+    padding: 1rem 0;
+    transition: var(--transition-smooth);
+    z-index: 1030;
+}
+
+.navbar-brand-custom {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.6rem;
+    background: linear-gradient(135deg, var(--accent-gold-start), var(--accent-gold-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 0.5px;
+}
+
+/* Premium Glass Cards */
+.glass-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--border-glass);
+    border-radius: 16px;
+    box-shadow: var(--card-shadow);
+    transition: var(--transition-smooth);
+    overflow: hidden;
+}
+
+.glass-card:hover {
+    transform: translateY(-8px);
+    background: var(--bg-card-hover);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 12px 40px 0 rgba(99, 102, 241, 0.15);
+}
+
+/* Book Cover Styles */
+.book-cover-wrapper {
+    position: relative;
+    padding-top: 145%; /* Golden Ratio Book aspect ratio */
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    transition: var(--transition-smooth);
+}
+
+.book-cover-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition-smooth);
+}
+
+.glass-card:hover .book-cover-image {
+    transform: scale(1.08);
+}
+
+/* Fallback CSS Book Cover */
+.book-cover-fallback {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.5rem;
+    border-left: 5px solid var(--accent-gold-start);
+}
+
+.book-cover-fallback-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: #ffffff;
+    font-size: 1.25rem;
+    line-height: 1.3;
+}
+
+.book-cover-fallback-author {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* AI badge & effects */
+.ai-badge {
+    background: linear-gradient(135deg, var(--accent-gold-start), #f59e0b);
+    color: #090b11;
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 0.35rem 0.75rem;
+    border-radius: 50px;
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.sparkle-icon {
+    animation: pulse 1.5s infinite;
+}
+
+/* Custom Gradients buttons */
+.btn-gold {
+    background: linear-gradient(135deg, var(--accent-gold-start), #d97706);
+    color: #090b11;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    padding: 0.6rem 1.5rem;
+    transition: var(--transition-smooth);
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+}
+
+.btn-gold:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+    color: #000;
+}
+
+.btn-indigo {
+    background: linear-gradient(135deg, var(--accent-primary-start), var(--accent-primary-end));
+    color: #ffffff;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    padding: 0.6rem 1.5rem;
+    transition: var(--transition-smooth);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
+}
+
+.btn-indigo:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+    color: #ffffff;
+}
+
+/* Details page dynamic layout */
+.ai-summary-container {
+    background: rgba(30, 41, 59, 0.25);
+    border: 1px dashed rgba(212, 175, 55, 0.3);
+    border-radius: 16px;
+    padding: 2rem;
+    position: relative;
+}
+
+.ai-summary-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    background: radial-gradient(circle at 90% 10%, rgba(212, 175, 55, 0.08), transparent 40%);
+    pointer-events: none;
+}
+
+/* Category lists */
+.category-pill {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-muted);
+    border: 1px solid var(--border-glass);
+    padding: 0.5rem 1.25rem;
+    border-radius: 50px;
+    transition: var(--transition-smooth);
+    text-decoration: none;
+    display: inline-block;
+}
+
+.category-pill:hover, .category-pill.active {
+    background: linear-gradient(135deg, var(--accent-primary-start), var(--accent-primary-end));
+    color: #fff;
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+/* Forms */
+.form-control-custom {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-glass);
+    color: #ffffff !important;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    transition: var(--transition-smooth);
+}
+
+.form-control-custom:focus {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--accent-primary-start);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+    outline: none;
+}
+
+/* Table styles for Cart */
+.table-custom {
+    color: var(--text-main) !important;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+
+.table-custom tr {
+    background: var(--bg-card);
+    transition: var(--transition-smooth);
+}
+
+.table-custom td, .table-custom th {
+    border: none !important;
+    padding: 1.25rem 1rem !important;
+    vertical-align: middle;
+}
+
+.table-custom tr td:first-child {
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-left: 1px solid var(--border-glass);
+}
+
+.table-custom tr td:last-child {
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-right: 1px solid var(--border-glass);
+}
+
+/* Hero Section */
+.hero-section {
+    background: radial-gradient(circle at 50% 50%, rgba(20, 24, 38, 0.8), var(--bg-dark)), 
+                linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(212, 175, 55, 0.05));
+    border-bottom: 1px solid var(--border-glass);
+    padding: 6rem 0 5rem 0;
+    margin-bottom: 3rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-subtitle {
+    color: var(--accent-gold-start);
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+/* Keyframes */
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.8; }
+}
+
+footer {
+    background: rgba(6, 8, 12, 0.95);
+    border-top: 1px solid var(--border-glass);
+    margin-top: auto;
+    padding: 4rem 0 2rem 0;
+}

@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout | Online Book Store{% endblock %}
+
+{% block content %}
+    <div class="container py-5">
+        <h1 class="font-serif text-white mb-4 pb-2 border-bottom border-secondary border-opacity-25"><i class="fa-solid fa-credit-card text-warning me-3"></i>Sanctuary Checkout</h1>
+        
+        <div class="row g-5">
+            
+            <!-- Shipping Details Form -->
+            <div class="col-lg-7">
+                <div class="glass-card p-4 p-md-5">
+                    <h3 class="font-serif text-white mb-4"><i class="fa-solid fa-truck text-indigo me-2 fs-5"></i>Recipient Shipping Details</h3>
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        
+                        <!-- First / Last Name -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label for="first_name" class="form-label small text-white-50">First Name</label>
+                                <input type="text" name="first_name" id="first_name" class="form-control form-control-custom text-white" placeholder="John" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="last_name" class="form-label small text-white-50">Last Name</label>
+                                <input type="text" name="last_name" id="last_name" class="form-control form-control-custom text-white" placeholder="Doe" required>
+                            </div>
+                        </div>
+
+                        <!-- Email / Phone -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-7">
+                                <label for="email" class="form-label small text-white-50">Email Address</label>
+                                <input type="email" name="email" id="email" class="form-control form-control-custom text-white" placeholder="john.doe@example.com" required>
+                            </div>
+                            <div class="col-md-5">
+                                <label for="phone" class="form-label small text-white-50">Phone Number (Optional)</label>
+                                <input type="text" name="phone" id="phone" class="form-control form-control-custom text-white" placeholder="+1 (555) 019-2834">
+                            </div>
+                        </div>
+
+                        <!-- Shipping Address -->
+                        <div class="mb-3">
+                            <label for="address" class="form-label small text-white-50">Delivery Street Address</label>
+                            <input type="text" name="address" id="address" class="form-control form-control-custom text-white" placeholder="1234 Midnight Library Lane" required>
+                        </div>
+
+                        <!-- City / Zip Code -->
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-8">
+                                <label for="city" class="form-label small text-white-50">City</label>
+                                <input type="text" name="city" id="city" class="form-control form-control-custom text-white" placeholder="Metropolis" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="zip_code" class="form-label small text-white-50">ZIP / Postal Code</label>
+                                <input type="text" name="zip_code" id="zip_code" class="form-control form-control-custom text-white" placeholder="90210" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-4 p-3 bg-dark bg-opacity-25 rounded border border-secondary border-opacity-25">
+                            <h6 class="text-white small fw-bold mb-1"><i class="fa-solid fa-shield-halved text-success me-2"></i>Secure Dummy Checkout</h6>
+                            <p class="text-muted small mb-0 lh-base">
+                                This is a simulated checkout environment. No credit card information is required to finalize this transaction. Simply submit the form to simulate a successful checkout.
+                            </p>
+                        </div>
+
+                        <button type="submit" class="btn btn-gold w-100 py-3 fw-bold text-uppercase d-flex align-items-center justify-content-center gap-2">
+                            <i class="fa-solid fa-lock"></i> Finalize Order (${{ cart.get_total_price }})
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Order Sidebar Summary -->
+            <div class="col-lg-5">
+                <div class="glass-card p-4 sticky-top" style="top: 100px;">
+                    <h3 class="font-serif text-white mb-4 pb-2 border-bottom border-secondary border-opacity-25">Order Summary</h3>
+                    
+                    <!-- Items scrollable list -->
+                    <div class="mb-4" style="max-height: 280px; overflow-y: auto;">
+                        {% for item in cart %}
+                            {% with book=item.book %}
+                                <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom border-secondary border-opacity-10">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div style="width: 40px; flex-shrink: 0;">
+                                            <div class="book-cover-wrapper" style="padding-top: 145%;">
+                                                {% if book.cover_url %}
+                                                    <img src="{{ book.cover_url }}" alt="{{ book.title }}" class="book-cover-image">
+                                                {% else %}
+                                                    <div class="book-cover-fallback" style="padding: 0.15rem;">
+                                                        <span class="book-cover-fallback-title" style="font-size: 0.4rem; line-height: 1;">{{ book.title|slice:":8" }}</span>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h6 class="text-white small mb-0 text-truncate font-serif" style="max-width: 200px;">{{ book.title }}</h6>
+                                            <span class="text-muted small">Qty: {{ item.quantity }}</span>
+                                        </div>
+                                    </div>
+                                    <span class="text-white small fw-bold">${{ item.total_price }}</span>
+                                </div>
+                            {% endwith %}
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mb-2 small">
+                        <span class="text-muted">Subtotal</span>
+                        <span class="text-white-50">${{ cart.get_total_price }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3 small">
+                        <span class="text-muted">Shipping</span>
+                        <span class="text-success fw-semibold">FREE</span>
+                    </div>
+                    
+                    <hr class="border-secondary opacity-25">
+                    
+                    <div class="d-flex justify-content-between mb-0">
+                        <span class="text-white">Total Cost</span>
+                        <span class="text-white fs-4 fw-bold">${{ cart.get_total_price }}</span>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+{% endblock %}

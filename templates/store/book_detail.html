@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ book.title }} | Online Book Store{% endblock %}
+
+{% block content %}
+    <div class="container py-5">
+        
+        <!-- Book Core Layout -->
+        <div class="row g-5 align-items-start mb-5">
+            
+            <!-- Book Cover Column -->
+            <div class="col-lg-4 col-md-5">
+                <div class="glass-card p-4">
+                    <div class="book-cover-wrapper mb-3">
+                        {% if book.cover_url %}
+                            <img src="{{ book.cover_url }}" alt="{{ book.title }}" class="book-cover-image">
+                        {% else %}
+                            <div class="book-cover-fallback">
+                                <span class="book-cover-fallback-title" style="font-size: 1.6rem;">{{ book.title }}</span>
+                                <span class="book-cover-fallback-author" style="font-size: 1rem;">By {{ book.author }}</span>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    {% if book.is_audiobook %}
+                        <div class="text-center py-2 px-3 border border-secondary border-opacity-25 rounded bg-dark bg-opacity-25">
+                            <span class="text-info d-flex align-items-center justify-content-center gap-2 small fw-semibold">
+                                <i class="fa-solid fa-headphones"></i> Audiobook edition is active
+                            </span>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Book Purchase & Meta Column -->
+            <div class="col-lg-8 col-md-7">
+                <div class="pb-3 mb-4 border-bottom border-secondary border-opacity-25">
+                    <span class="badge bg-indigo text-white mb-2 px-3 py-2 fs-7">{{ book.category.name }}</span>
+                    <h1 class="display-5 text-white font-serif fw-bold mb-2">{{ book.title }}</h1>
+                    <p class="fs-5 text-muted">Written by <strong class="text-white">{{ book.author }}</strong></p>
+                </div>
+                
+                <!-- Description -->
+                <div class="mb-4">
+                    <h5 class="text-white font-serif mb-2">Original Synopsis</h5>
+                    <p class="text-white-50 lh-lg" style="text-align: justify;">{{ book.description }}</p>
+                </div>
+
+                <!-- Audiobook Preview Player -->
+                {% if book.is_audiobook %}
+                    <div class="glass-card p-4 mb-4" style="background: rgba(99, 102, 241, 0.05); border-color: rgba(99, 102, 241, 0.25);">
+                        <h5 class="text-white font-serif mb-3 d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-microphone text-info"></i> Audiobook Commentary Preview
+                        </h5>
+                        <audio controls class="w-100 rounded" style="outline: none;">
+                            <source src="{{ book.audio_url|default:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' }}" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                        <p class="text-muted small mt-2 mb-0"><i class="fa-solid fa-circle-info me-1"></i> Press play to hear an analysis segment for {{ book.title }}.</p>
+                    </div>
+                {% endif %}
+
+                <!-- Purchase Card -->
+                <div class="glass-card p-4 d-flex flex-wrap justify-content-between align-items-center gap-4">
+                    <div>
+                        <span class="text-muted small d-block mb-1">Exclusive Sanctuary Price</span>
+                        <span class="display-6 text-white fw-bold">${{ book.price }}</span>
+                    </div>
+                    
+                    <form action="{% url 'store:cart_add' book.id %}" method="POST" class="d-flex gap-2">
+                        {% csrf_token %}
+                        <div class="input-group" style="width: 130px;">
+                            <span class="input-group-text bg-dark border-secondary text-white-50">Qty</span>
+                            <input type="number" name="quantity" class="form-control bg-dark border-secondary text-white text-center" value="1" min="1" max="10">
+                        </div>
+                        <button type="submit" class="btn btn-gold px-4 py-2 d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-basket-shopping"></i> Add to Cart
+                        </button>
+                    </form>
+                </div>
+                
+            </div>
+        </div>
+
+        <!-- AI Book Summary Section (Powered by Gemini) -->
+        <section class="ai-summary-container p-4 p-md-5 mb-5 shadow-lg">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4 pb-3 border-bottom border-warning border-opacity-25">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="ai-badge">
+                        <i class="fa-solid fa-wand-magic-sparkles sparkle-icon"></i> Gemini AI Summary
+                    </span>
+                    <h3 class="text-white font-serif m-0">Instant Intellectual Insight</h3>
+                </div>
+                <span class="text-muted small"><i class="fa-solid fa-bolt me-1"></i> Live Generation & Caching active</span>
+            </div>
+
+            <!-- Markdown Summary Contents -->
+            <div id="ai-raw-summary" style="display: none;">{{ book.summary_cache }}</div>
+            <div id="ai-rendered-summary" class="text-white-50">
+                <div class="text-center py-4">
+                    <div class="spinner-border text-warning" role="status">
+                        <span class="visually-hidden">Loading summary...</span>
+                    </div>
+                    <p class="small text-muted mt-2 mb-0">Decoding Gemini AI analysis...</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <!-- Marked.js for fast client-side markdown compiling -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var rawText = document.getElementById("ai-raw-summary").textContent;
+            var renderedContainer = document.getElementById("ai-rendered-summary");
+            
+            if (rawText && rawText.trim().length > 10) {
+                // Compile Markdown to Premium HTML in browser
+                renderedContainer.innerHTML = marked.parse(rawText);
+                
+                // Polish any bullet lists or headers rendered by marked for dark mode style
+                renderedContainer.querySelectorAll('h3, h4').forEach(function(el) {
+                    el.classList.add('text-white', 'font-serif', 'mt-4', 'mb-3');
+                });
+                renderedContainer.querySelectorAll('ul').forEach(function(el) {
+                    el.classList.add('list-group', 'list-group-flush', 'bg-transparent', 'mb-3');
+                });
+                renderedContainer.querySelectorAll('li').forEach(function(el) {
+                    el.classList.add('list-group-item', 'bg-transparent', 'border-0', 'text-white-50', 'ps-0', 'py-1');
+                    // Add bullet icon
+                    el.innerHTML = '<i class="fa-solid fa-chevron-right text-warning me-2 small"></i>' + el.innerHTML;
+                });
+            } else {
+                renderedContainer.innerHTML = "<p class='text-muted italic mb-0'>Failed to load AI summary details for this selection.</p>";
+            }
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}Online Book Store | Discover Catalogs{% endblock %}
+
+{% block content %}
+    <div class="container py-5">
+        <div class="row g-4">
+            
+            <!-- Sidebar for Dimensions/Categories -->
+            <div class="col-lg-3">
+                <div class="glass-card p-4 sticky-top" style="top: 100px; z-index: 10;">
+                    <h5 class="font-serif text-white mb-3 pb-2 border-bottom border-secondary opacity-90">
+                        <i class="fa-solid fa-compass text-warning me-2"></i>Dimensions
+                    </h5>
+                    
+                    <div class="d-flex flex-column gap-2">
+                        <a href="{% url 'store:book_list' %}" class="category-pill text-center {% if not category %}active{% endif %}">
+                            All Realms
+                        </a>
+                        {% for cat in categories %}
+                            <a href="{% url 'store:book_list_by_category' cat.slug %}" class="category-pill text-center {% if category.id == cat.id %}active{% endif %}">
+                                {{ cat.name }}
+                            </a>
+                        {% empty %}
+                            <!-- Placeholders -->
+                            <a href="#" class="category-pill text-center">Fiction</a>
+                            <a href="#" class="category-pill text-center">Technology</a>
+                            <a href="#" class="category-pill text-center">Education</a>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="mt-4 pt-3 border-top border-secondary opacity-80">
+                        <h6 class="text-white font-serif mb-2">Need Guidance?</h6>
+                        <p class="text-muted small lh-lg mb-0">
+                            Looking for a specific genre or audio layout? Use the navbar search to query book authors or special titles, and instantly receive summaries.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Book Grid -->
+            <div class="col-lg-9">
+                <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom border-secondary opacity-95">
+                    <div>
+                        <h1 class="font-serif text-white mb-1">
+                            {% if category %}
+                                Realm: {{ category.name }}
+                            {% elif query %}
+                                Search: "{{ query }}"
+                            {% else %}
+                                Online Book Store Library
+                            {% endif %}
+                        </h1>
+                        <p class="text-muted small mb-0">Showing {{ books|length }} books in this dimension</p>
+                    </div>
+                </div>
+                
+                {% if books %}
+                    <div class="row g-4">
+                        {% for book in books %}
+                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                <div class="glass-card h-100 d-flex flex-column p-3">
+                                    <a href="{% url 'store:book_detail' book.slug %}" class="text-decoration-none mb-3">
+                                        <div class="book-cover-wrapper">
+                                            {% if book.cover_url %}
+                                                <img src="{{ book.cover_url }}" alt="{{ book.title }}" class="book-cover-image">
+                                            {% else %}
+                                                <div class="book-cover-fallback">
+                                                    <span class="book-cover-fallback-title">{{ book.title }}</span>
+                                                    <span class="book-cover-fallback-author">By {{ book.author }}</span>
+                                                </div>
+                                            {% endif %}
+                                            {% if book.is_audiobook %}
+                                                <div class="position-absolute bottom-0 end-0 m-2">
+                                                    <span class="badge bg-dark border border-secondary text-info d-flex align-items-center gap-1 rounded-circle p-2">
+                                                        <i class="fa-solid fa-headphones"></i>
+                                                    </span>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </a>
+                                    <h5 class="text-white fs-6 mb-1 text-truncate font-serif">
+                                        <a href="{% url 'store:book_detail' book.slug %}" class="text-white text-decoration-none">{{ book.title }}</a>
+                                    </h5>
+                                    <p class="text-muted small mb-2 text-truncate">By {{ book.author }}</p>
+                                    <div class="d-flex justify-content-between align-items-center mt-auto">
+                                        <span class="fw-bold text-white fs-5">${{ book.price }}</span>
+                                        <a href="{% url 'store:book_detail' book.slug %}" class="btn btn-gold btn-sm"><i class="fa-solid fa-eye me-1"></i> Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <div class="glass-card py-5 px-4 text-muted">
+                            <i class="fa-solid fa-book-bookmark fs-1 mb-3 text-white-20"></i>
+                            <h4 class="text-white font-serif">Quiet Libraries</h4>
+                            <p class="small mb-3">No books matching your query were found in this dimension.</p>
+                            <a href="{% url 'store:book_list' %}" class="btn btn-indigo btn-sm">Clear Filters & Search</a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            
+        </div>
+    </div>
+{% endblock %}

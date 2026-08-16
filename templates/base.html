@@ -1,0 +1,154 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Online Book Store | Midnight Literary Haven{% endblock %}</title>
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/dist/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Custom theme styles -->
+    <link rel="stylesheet" href="{% static 'css/theme.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <!-- Premium Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
+        <div class="container">
+            <a class="navbar-brand navbar-brand-custom" href="{% url 'store:home' %}">
+                <i class="fa-solid fa-book-open me-2"></i>ONLINE BOOK STORE
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <li class="nav-item">
+                        <a class="nav-link text-white-50 px-3" href="{% url 'store:home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white-50 px-3" href="{% url 'store:book_list' %}">Explore Catalog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white-50 px-3" href="{% url 'store:book_list' %}?q=audiobook">Audiobooks</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white-50 px-3" href="{% url 'admin:index' %}" target="_blank">Admin Panel</a>
+                    </li>
+                </ul>
+                
+                <!-- Search Bar -->
+                <form class="d-flex me-3 position-relative" action="{% url 'store:book_list' %}" method="GET">
+                    <input class="form-control form-control-custom pe-5" type="search" name="q" placeholder="Search title or author..." aria-label="Search" value="{{ query|default:'' }}">
+                    <button class="btn border-0 text-white-50 position-absolute end-0 top-50 translate-middle-y px-3" type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </form>
+                
+                <!-- Cart Button -->
+                <a href="{% url 'store:cart_detail' %}" class="btn btn-indigo position-relative d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span>Cart</span>
+                    {% if cart|length > 0 %}
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-dark">
+                            {{ cart|length }}
+                        </span>
+                    {% endif %}
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Notification Toast Messages -->
+    <div class="container mt-3">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags == 'error' %}alert-danger{% elif message.tags == 'warning' %}alert-warning{% else %}alert-success{% endif %} alert-dismissible fade show glass-card text-white border-0 py-3 mb-3" role="alert" style="background: rgba(26, 32, 53, 0.95);">
+                    <div class="d-flex align-items-center gap-2">
+                        {% if message.tags == 'error' %}
+                            <i class="fa-solid fa-circle-exclamation text-danger fs-5"></i>
+                        {% elif message.tags == 'warning' %}
+                            <i class="fa-solid fa-triangle-exclamation text-warning fs-5"></i>
+                        {% else %}
+                            <i class="fa-solid fa-circle-check text-success fs-5"></i>
+                        {% endif %}
+                        <div>{{ message }}</div>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="navbar-brand-custom mb-3"><i class="fa-solid fa-book-open me-2"></i>ONLINE BOOK STORE</h5>
+                    <p class="text-muted small lh-lg">
+                        Step into a carefully curated midnight sanctuary designed for literary discoverers. Online Book Store delivers premium intellectual readings, elegant print layouts, and dynamic AI-powered summarizations for a modern literary experience.
+                    </p>
+                    <div class="d-flex gap-3 mt-3">
+                        <a href="#" class="text-white-50"><i class="fa-brands fa-twitter fs-5"></i></a>
+                        <a href="#" class="text-white-50"><i class="fa-brands fa-instagram fs-5"></i></a>
+                        <a href="#" class="text-white-50"><i class="fa-brands fa-github fs-5"></i></a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-2 col-md-6">
+                    <h6 class="text-white mb-3 font-serif">Quick Navigation</h6>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><a href="{% url 'store:home' %}" class="text-muted text-decoration-none">Home Landing</a></li>
+                        <li class="mb-2"><a href="{% url 'store:book_list' %}" class="text-muted text-decoration-none">All Catalogs</a></li>
+                        <li class="mb-2"><a href="{% url 'store:book_list' %}?q=audiobook" class="text-muted text-decoration-none">Audiobooks</a></li>
+                        <li class="mb-2"><a href="{% url 'store:cart_detail' %}" class="text-muted text-decoration-none">Shopping Cart</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-2 col-md-6">
+                    <h6 class="text-white mb-3 font-serif">Categories</h6>
+                    <ul class="list-unstyled small">
+                        <li><a href="{% url 'store:book_list' %}" class="text-muted text-decoration-none d-block mb-2">All Categories</a></li>
+                        <!-- Handled category loop helper in templates when dynamic categories populated -->
+                        <li><a href="{% url 'store:book_list' %}?q=Fiction" class="text-muted text-decoration-none d-block mb-2">Fiction</a></li>
+                        <li><a href="{% url 'store:book_list' %}?q=Tech" class="text-muted text-decoration-none d-block mb-2">Technology</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <h6 class="text-white mb-3 font-serif">Join Our Newsletter</h6>
+                    <p class="text-muted small mb-3">Subscribe to receive exclusive monthly selections, member discounts, and fresh literary publications.</p>
+                    <form action="{% url 'store:newsletter_subscribe' %}" method="POST" class="d-flex gap-2">
+                        {% csrf_token %}
+                        <input type="email" name="email" class="form-control form-control-custom text-white" placeholder="your@email.com" required>
+                        <button type="submit" class="btn btn-gold px-3"><i class="fa-solid fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+            <hr class="my-4 border-secondary opacity-25">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start">
+                    <span class="text-muted small">&copy; 2026 Online Book Store. All rights reserved.</span>
+                </div>
+                <div class="col-md-6 text-center text-md-end mt-2 mt-md-0">
+                    <span class="text-muted small">Powered by Django & Google Gemini API</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JavaScript Bundle CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

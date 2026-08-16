@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block title %}Your Cart | Online Book Store{% endblock %}
+
+{% block content %}
+    <div class="container py-5">
+        <h1 class="font-serif text-white mb-4 pb-2 border-bottom border-secondary border-opacity-25"><i class="fa-solid fa-basket-shopping text-warning me-3"></i>Your Literary Basket</h1>
+        
+        {% if cart %}
+            <div class="row g-4">
+                
+                <!-- Cart Items List Table -->
+                <div class="col-lg-8">
+                    <div class="table-responsive">
+                        <table class="table table-custom">
+                            <thead>
+                                <tr class="text-white-50 small text-uppercase">
+                                    <th>Book Selection</th>
+                                    <th>Price</th>
+                                    <th class="text-center">Quantity</th>
+                                    <th class="text-end">Subtotal</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in cart %}
+                                    {% with book=item.book %}
+                                        <tr>
+                                            <!-- Book Title / Author -->
+                                            <td>
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <div style="width: 50px; flex-shrink: 0;">
+                                                        <div class="book-cover-wrapper" style="padding-top: 145%;">
+                                                            {% if book.cover_url %}
+                                                                <img src="{{ book.cover_url }}" alt="{{ book.title }}" class="book-cover-image">
+                                                            {% else %}
+                                                                <div class="book-cover-fallback" style="padding: 0.25rem;">
+                                                                    <span class="book-cover-fallback-title" style="font-size: 0.5rem; line-height:1.1;">{{ book.title|slice:":10" }}</span>
+                                                                </div>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="text-white mb-1 font-serif"><a href="{% url 'store:book_detail' book.slug %}" class="text-white text-decoration-none">{{ book.title }}</a></h6>
+                                                        <span class="text-muted small">By {{ book.author }}</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            
+                                            <!-- Unit Price -->
+                                            <td class="text-white fw-semibold">${{ item.price }}</td>
+                                            
+                                            <!-- Quantity Update Form -->
+                                            <td>
+                                                <form action="{% url 'store:cart_update' book.id %}" method="POST" class="d-flex justify-content-center">
+                                                    {% csrf_token %}
+                                                    <div class="input-group input-group-sm" style="max-width: 100px;">
+                                                        <input type="number" name="quantity" class="form-control bg-dark border-secondary text-white text-center" value="{{ item.quantity }}" min="1" max="10" onchange="this.form.submit()">
+                                                    </div>
+                                                </form>
+                                            </td>
+                                            
+                                            <!-- Subtotal -->
+                                            <td class="text-end text-white fw-bold">${{ item.total_price }}</td>
+                                            
+                                            <!-- Remove Action -->
+                                            <td class="text-center">
+                                                <a href="{% url 'store:cart_remove' book.id %}" class="text-danger p-2" title="Remove Book">
+                                                    <i class="fa-solid fa-trash-can"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endwith %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mt-3">
+                        <a href="{% url 'store:book_list' %}" class="btn btn-outline-light px-4"><i class="fa-solid fa-arrow-left-long me-2"></i>Continue Browsing</a>
+                    </div>
+                </div>
+                
+                <!-- Order Summary Cards Sidebar -->
+                <div class="col-lg-4">
+                    <div class="glass-card p-4 sticky-top" style="top: 100px;">
+                        <h4 class="font-serif text-white mb-4 pb-2 border-bottom border-secondary border-opacity-25">Summary</h4>
+                        
+                        <div class="d-flex justify-content-between mb-3 small">
+                            <span class="text-muted">Total Volumes</span>
+                            <span class="text-white fw-semibold">{{ cart|length }} books</span>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mb-4">
+                            <span class="text-white">Total Amount</span>
+                            <span class="text-white display-6 fw-bold">${{ cart.get_total_price }}</span>
+                        </div>
+                        
+                        <div class="alert alert-dark border-secondary border-opacity-25 mb-4 p-3 bg-dark bg-opacity-25">
+                            <span class="small text-muted d-flex align-items-start gap-2 lh-base">
+                                <i class="fa-solid fa-circle-check text-success mt-1"></i>
+                                Free shipping & instant AI synopsis are bundled standard in checkout.
+                            </span>
+                        </div>
+                        
+                        <a href="{% url 'store:checkout' %}" class="btn btn-gold w-100 py-3 fw-bold text-uppercase d-flex align-items-center justify-content-center gap-2">
+                            <span>Proceed to Checkout</span>
+                            <i class="fa-solid fa-chevron-right fs-7"></i>
+                        </a>
+                    </div>
+                </div>
+                
+            </div>
+        {% else %}
+            <!-- Empty Cart Warning -->
+            <div class="text-center py-5">
+                <div class="glass-card py-5 px-4 text-muted mx-auto" style="max-width: 550px;">
+                    <i class="fa-solid fa-cart-flatbed-suitcase fs-1 mb-3 text-white-20"></i>
+                    <h4 class="text-white font-serif mb-2">Empty Library Basket</h4>
+                    <p class="small mb-4">Your shopping basket is currently as empty as an unwritten page. Browse our catalog and fill it with beautiful masterpieces.</p>
+                    <a href="{% url 'store:book_list' %}" class="btn btn-indigo"><i class="fa-solid fa-compass me-2"></i>Explore Books</a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
