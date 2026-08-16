@@ -3,303 +3,804 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Book Store - Django AI Powered Web App</title>
+    <title>Online Book Store | Midnight Literary Sanctuary</title>
+    
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --bg-dark: #0f172a;
-            --card-bg: rgba(30, 41, 59, 0.7);
-            --border-color: rgba(255, 255, 255, 0.1);
-            --primary: #6366f1;
-            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
-            --accent: #38bdf8;
+            --bg-dark: #090b11;
+            --bg-card: rgba(18, 22, 35, 0.85);
+            --bg-card-hover: rgba(26, 32, 53, 0.95);
+            --border-glass: rgba(255, 255, 255, 0.08);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            
+            --accent-gold-start: #d4af37;
+            --accent-gold-end: #f3e5ab;
+            --accent-primary-start: #6366f1;
+            --accent-primary-end: #8b5cf6;
+            
+            --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
+            --transition-smooth: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         body {
-            font-family: 'Inter', sans-serif;
             background-color: var(--bg-dark);
             color: var(--text-main);
+            font-family: 'Inter', sans-serif;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            background-image: 
-                radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 85% 80%, rgba(236, 72, 153, 0.15) 0%, transparent 40%);
             overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 15%, rgba(99, 102, 241, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 85%, rgba(212, 175, 55, 0.06) 0%, transparent 40%);
         }
 
-        h1, h2, h3 {
-            font-family: 'Outfit', sans-serif;
+        h1, h2, h3, h4, h5, h6, .font-serif {
+            font-family: 'Playfair Display', serif;
         }
 
-        header {
-            padding: 1.5rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            backdrop-filter: blur(12px);
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.3); }
+
+        /* Navbar */
+        .navbar-custom {
+            background: rgba(9, 11, 17, 0.85) !important;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-glass);
+            padding: 1rem 0;
+            z-index: 1030;
         }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            font-size: 1.5rem;
+        .navbar-brand-custom {
+            font-family: 'Playfair Display', serif;
             font-weight: 700;
-            background: var(--primary-gradient);
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--accent-gold-start), var(--accent-gold-end));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: 0.5px;
         }
 
-        .repo-btn {
+        .form-control-custom {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-glass);
+            color: #ffffff !important;
+            border-radius: 8px;
+            padding: 0.6rem 1rem;
+            transition: var(--transition-smooth);
+        }
+
+        .form-control-custom:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--accent-primary-start);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+            outline: none;
+        }
+
+        .form-control-custom::placeholder {
+            color: #64748b;
+        }
+
+        /* Glass Cards */
+        .glass-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition-smooth);
+            overflow: hidden;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-6px);
+            background: var(--bg-card-hover);
+            border-color: rgba(255, 255, 255, 0.18);
+            box-shadow: 0 12px 40px 0 rgba(99, 102, 241, 0.2);
+        }
+
+        /* Book Covers */
+        .book-cover-wrapper {
+            position: relative;
+            padding-top: 140%;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            transition: var(--transition-smooth);
+        }
+
+        .book-cover-fallback {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 1.25rem;
+            border-left: 5px solid var(--accent-gold-start);
+        }
+
+        .book-cover-fallback-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: #ffffff;
+            font-size: 1.15rem;
+            line-height: 1.3;
+        }
+
+        .book-cover-fallback-author {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Buttons */
+        .btn-gold {
+            background: linear-gradient(135deg, var(--accent-gold-start), #d97706);
+            color: #090b11;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem 1.25rem;
+            transition: var(--transition-smooth);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+            color: #000;
+        }
+
+        .btn-indigo {
+            background: linear-gradient(135deg, var(--accent-primary-start), var(--accent-primary-end));
+            color: #ffffff;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem 1.25rem;
+            transition: var(--transition-smooth);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
+        }
+
+        .btn-indigo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+            color: #ffffff;
+        }
+
+        /* Category Pills */
+        .category-pill {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            border: 1px solid var(--border-glass);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            transition: var(--transition-smooth);
+            text-decoration: none;
+            cursor: pointer;
+            display: inline-block;
+            font-size: 0.9rem;
+        }
+
+        .category-pill:hover, .category-pill.active {
+            background: linear-gradient(135deg, var(--accent-primary-start), var(--accent-primary-end));
+            color: #fff;
+            border-color: transparent;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+        }
+
+        /* Hero */
+        .hero-section {
+            background: radial-gradient(circle at 50% 50%, rgba(20, 24, 38, 0.9), var(--bg-dark)), 
+                        linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(212, 175, 55, 0.05));
+            border-bottom: 1px solid var(--border-glass);
+            padding: 5rem 0 4rem 0;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .hero-subtitle {
+            color: var(--accent-gold-start);
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        /* AI Badge */
+        .ai-badge {
+            background: linear-gradient(135deg, var(--accent-gold-start), #f59e0b);
+            color: #090b11;
+            font-weight: 700;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            padding: 0.3rem 0.7rem;
+            border-radius: 50px;
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            padding: 0.6rem 1.2rem;
-            border-radius: 9999px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
+            gap: 4px;
         }
 
-        .repo-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
+        .toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 2000;
         }
 
-        main {
-            flex: 1;
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 3rem 1.5rem;
-            width: 100%;
-        }
-
-        .hero {
-            text-align: center;
-            margin-bottom: 3.5rem;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 0.4rem 1rem;
-            border-radius: 9999px;
-            background: rgba(99, 102, 241, 0.15);
-            border: 1px solid rgba(99, 102, 241, 0.3);
-            color: #818cf8;
-            font-size: 0.875rem;
-            font-weight: 600;
-            margin-bottom: 1.25rem;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            line-height: 1.15;
-            margin-bottom: 1.25rem;
-        }
-
-        .hero h1 span {
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p {
-            font-size: 1.15rem;
-            color: var(--text-muted);
-            max-width: 700px;
-            margin: 0 auto 2rem;
-            line-height: 1.6;
-        }
-
-        .notice-card {
-            background: rgba(245, 158, 11, 0.1);
-            border: 1px solid rgba(245, 158, 11, 0.3);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            margin-bottom: 3rem;
-            display: flex;
-            gap: 1rem;
-            align-items: flex-start;
-        }
-
-        .notice-card i {
-            color: #f59e0b;
-            font-size: 1.5rem;
-            margin-top: 0.2rem;
-        }
-
-        .notice-content h3 {
-            color: #fbbf24;
-            margin-bottom: 0.5rem;
-            font-size: 1.1rem;
-        }
-
-        .notice-content p {
-            color: #cbd5e1;
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3.5rem;
-        }
-
-        .feature-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 1rem;
-            padding: 1.75rem;
-            backdrop-filter: blur(12px);
-            transition: all 0.3s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(99, 102, 241, 0.4);
-        }
-
-        .feature-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 0.75rem;
-            background: var(--primary-gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
+        /* Modal Styles */
+        .modal-content-glass {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
             color: #fff;
-            margin-bottom: 1rem;
-        }
-
-        .feature-card h3 {
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .feature-card p {
-            color: var(--text-muted);
-            font-size: 0.925rem;
-            line-height: 1.5;
-        }
-
-        .code-box {
-            background: #020617;
-            border: 1px solid var(--border-color);
-            border-radius: 1rem;
-            padding: 1.75rem;
-            margin-bottom: 3rem;
-        }
-
-        .code-box h3 {
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .code-block {
-            background: #0f172a;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            font-family: monospace;
-            color: #38bdf8;
-            font-size: 0.95rem;
-            overflow-x: auto;
-            margin-bottom: 0.75rem;
         }
 
         footer {
-            border-top: 1px solid var(--border-color);
-            padding: 1.5rem;
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.875rem;
-        }
-
-        @media (max-width: 640px) {
-            .hero h1 { font-size: 2.2rem; }
+            background: rgba(6, 8, 12, 0.95);
+            border-top: 1px solid var(--border-glass);
+            margin-top: auto;
+            padding: 4rem 0 2rem 0;
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="logo">
-            <i class="fa-solid fa-book-open"></i> Online Book Store
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
+        <div class="container">
+            <a class="navbar-brand navbar-brand-custom" href="#" onclick="filterCategory('all'); return false;">
+                <i class="fa-solid fa-book-open me-2"></i>ONLINE BOOK STORE
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <li class="nav-item">
+                        <a class="nav-link text-white px-3" href="#" onclick="filterCategory('all'); return false;">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white-50 px-3" href="#catalog" onclick="filterCategory('all');">Explore Catalog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white-50 px-3" href="#audiobooks" onclick="filterCategory('audiobook');">Audiobooks</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white-50 px-3" href="https://github.com/santhoshkumar-techcoder/ONLINE-BOOK-STORE" target="_blank">
+                            <i class="fa-brands fa-github me-1"></i> GitHub Repo
+                        </a>
+                    </li>
+                </ul>
+                
+                <!-- Search Bar -->
+                <div class="d-flex me-3 position-relative" style="min-width: 250px;">
+                    <input class="form-control form-control-custom pe-5" id="searchInput" type="search" placeholder="Search title or author..." onkeyup="handleSearch()">
+                    <button class="btn border-0 text-white-50 position-absolute end-0 top-50 translate-middle-y px-3" type="button">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+                
+                <!-- Cart Button -->
+                <button class="btn btn-indigo position-relative d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#cartModal">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span>Cart</span>
+                    <span class="badge rounded-pill bg-danger border border-dark ms-1" id="cartCount">0</span>
+                </button>
+            </div>
         </div>
-        <a href="https://github.com/santhoshkumar-techcoder/ONLINE-BOOK-STORE" class="repo-btn" target="_blank">
-            <i class="fa-brands fa-github"></i> GitHub Repository
-        </a>
+    </nav>
+
+    <!-- Toast Notifications Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Hero Header -->
+    <header class="hero-section text-center">
+        <div class="container py-3">
+            <span class="hero-subtitle mb-2 d-inline-block"><i class="fa-solid fa-sparkles me-2 text-warning"></i>Welcome to Online Book Store</span>
+            <h1 class="display-3 fw-bold text-white mb-3 font-serif">Unveil the Soul of Every Book</h1>
+            <p class="lead text-white-50 mx-auto mb-4" style="max-width: 650px;">
+                Immerse yourself in a luxurious dark library experience with curated categories, audio adaptations, and instant <strong>AI-powered summaries</strong> driven by Google Gemini API.
+            </p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="#explore" class="btn btn-indigo px-4 py-2"><i class="fa-solid fa-compass me-2"></i>Explore Sanctuary</a>
+                <a href="#catalog" class="btn btn-gold px-4 py-2"><i class="fa-solid fa-list-ul me-2"></i>Full Catalog</a>
+            </div>
+        </div>
     </header>
 
-    <main>
-        <section class="hero">
-            <span class="badge"><i class="fa-solid fa-code-branch"></i> Django 5 / Python Full-Stack App</span>
-            <h1>Interactive <span>AI-Powered</span> Book Store</h1>
-            <p>A full-stack Django e-commerce platform with dynamic book filtering, interactive shopping cart, custom collections, and AI summary generation.</p>
-        </section>
-
-        <div class="notice-card">
-            <i class="fa-solid fa-circle-info"></i>
-            <div class="notice-content">
-                <h3>Why GitHub Pages shows a 404 for Python Backends</h3>
-                <p>GitHub Pages hosts static HTML/CSS files only. Because this application is built with <strong>Django (Python backend + SQLite database)</strong>, it requires a Python server (such as Render or PythonAnywhere) to run the dynamic server code.</p>
-            </div>
+    <!-- Category Dimension Carousel -->
+    <section class="container mb-5 text-center" id="explore">
+        <h4 class="font-serif text-white mb-4 text-center">Select Your Literary Dimension</h4>
+        <div class="d-flex flex-wrap justify-content-center gap-2" id="categoryContainer">
+            <span class="category-pill active" onclick="filterCategory('all', this)">All Dimensions</span>
+            <span class="category-pill" onclick="filterCategory('Fiction', this)">Fiction</span>
+            <span class="category-pill" onclick="filterCategory('Technology & Sci-Fi', this)">Technology & Sci-Fi</span>
+            <span class="category-pill" onclick="filterCategory('Education & Learning', this)">Education & Learning</span>
+            <span class="category-pill" onclick="filterCategory('Biography & Memoirs', this)">Biography & Memoirs</span>
         </div>
+    </section>
 
-        <section class="code-box">
-            <h3><i class="fa-solid fa-terminal" style="color: #6366f1;"></i> Quick Local Start Instructions</h3>
-            <p style="color: var(--text-muted); margin-bottom: 1rem;">Run the following commands in your terminal to start the live web application on your machine:</p>
-            
-            <div class="code-block">git clone https://github.com/santhoshkumar-techcoder/ONLINE-BOOK-STORE.git</div>
-            <div class="code-block">cd ONLINE-BOOK-STORE</div>
-            <div class="code-block">python -m venv .venv && .venv\Scripts\activate</div>
-            <div class="code-block">pip install -r requirements.txt</div>
-            <div class="code-block">python manage.py runserver</div>
-            
-            <p style="color: #38bdf8; font-size: 0.9rem; margin-top: 0.5rem;"><i class="fa-solid fa-globe"></i> Open <strong>http://127.0.0.1:8000</strong> in your browser to view the application!</p>
+    <!-- Main Dynamic Showcase Grid -->
+    <main class="container my-4" id="catalog">
+        
+        <!-- Best Sellers -->
+        <section class="mb-5" id="bestsellers-section">
+            <div class="d-flex justify-content-between align-items-end mb-4 border-bottom border-secondary pb-3 opacity-90">
+                <div>
+                    <h2 class="font-serif text-white mb-1"><i class="fa-solid fa-crown text-warning me-2 fs-4"></i>Best Sellers</h2>
+                    <p class="text-muted small mb-0">Critically acclaimed masterpieces and crowd favorites.</p>
+                </div>
+            </div>
+            <div class="row g-4" id="bestsellersGrid"></div>
         </section>
 
-        <section class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fa-solid fa-robot"></i></div>
-                <h3>AI Summary Generator</h3>
-                <p>Generates instant AI summaries and key insights for books using Google Gemini API integration.</p>
+        <!-- New Arrivals -->
+        <section class="mb-5" id="newarrivals-section">
+            <div class="d-flex justify-content-between align-items-end mb-4 border-bottom border-secondary pb-3 opacity-90">
+                <div>
+                    <h2 class="font-serif text-white mb-1"><i class="fa-solid fa-hourglass-start text-info me-2 fs-4"></i>New Arrivals</h2>
+                    <p class="text-muted small mb-0">Fresh releases that just entered the sanctuary libraries.</p>
+                </div>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fa-solid fa-cart-shopping"></i></div>
-                <h3>Dynamic Shopping Cart</h3>
-                <p>Full AJAX-powered shopping cart management, item updates, quantity controls, and checkout flow.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fa-solid fa-layer-group"></i></div>
-                <h3>Curated Book Catalog</h3>
-                <p>Categories for Fiction, Non-Fiction, Sci-Fi, Audiobooks, Best Sellers, and New Arrivals.</p>
-            </div>
+            <div class="row g-4" id="newArrivalsGrid"></div>
         </section>
+
+        <!-- Audiobooks -->
+        <section class="mb-5" id="audiobooks">
+            <div class="d-flex justify-content-between align-items-end mb-4 border-bottom border-secondary pb-3 opacity-90">
+                <div>
+                    <h2 class="font-serif text-white mb-1"><i class="fa-solid fa-headphones text-primary me-2 fs-4"></i>Audiobook Dimensions</h2>
+                    <p class="text-muted small mb-0">Immersive audio formats with interactive commentary previews.</p>
+                </div>
+            </div>
+            <div class="row g-4" id="audiobooksGrid"></div>
+        </section>
+
     </main>
 
+    <!-- Book Details & AI Summary Modal -->
+    <div class="modal fade" id="bookModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content modal-content-glass p-3">
+                <div class="modal-header border-0 pb-0">
+                    <span class="ai-badge"><i class="fa-solid fa-wand-magic-sparkles me-1"></i> Gemini AI Insights</span>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-4 align-items-center">
+                        <div class="col-md-4">
+                            <div class="book-cover-wrapper">
+                                <div class="book-cover-fallback" id="modalCover">
+                                    <span class="book-cover-fallback-title" id="modalTitle">Title</span>
+                                    <span class="book-cover-fallback-author" id="modalAuthor">Author</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <h3 class="font-serif text-white mb-1" id="modalDetailTitle">Book Title</h3>
+                            <p class="text-muted mb-2">By <span id="modalDetailAuthor" class="text-white">Author</span> • <span class="badge bg-secondary" id="modalCategory">Category</span></p>
+                            <h4 class="text-gold fw-bold mb-3" style="color: var(--accent-gold-start);" id="modalPrice">$0.00</h4>
+                            
+                            <div class="p-3 mb-3 rounded-3" style="background: rgba(30, 41, 59, 0.5); border: 1px dashed rgba(212, 175, 55, 0.3);">
+                                <h6 class="text-warning mb-2 font-serif"><i class="fa-solid fa-robot me-1"></i> AI Executive Summary</h6>
+                                <p class="small text-white-50 mb-0 lh-lg" id="modalAISummary">Generating insights...</p>
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-gold flex-grow-1" id="modalAddCartBtn"><i class="fa-solid fa-cart-shopping me-1"></i> Add to Cart</button>
+                                <button class="btn btn-outline-light" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shopping Cart Modal -->
+    <div class="modal fade" id="cartModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content modal-content-glass p-3">
+                <div class="modal-header border-bottom border-secondary">
+                    <h5 class="modal-title font-serif text-white"><i class="fa-solid fa-cart-shopping me-2 text-indigo"></i> Your Literary Cart</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="cartModalBody">
+                    <!-- Populated by JavaScript -->
+                </div>
+                <div class="modal-footer border-top border-secondary d-flex justify-content-between">
+                    <div>
+                        <span class="text-muted me-2">Total Amount:</span>
+                        <span class="fs-4 fw-bold text-white" id="cartTotalDisplay">$0.00</span>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-outline-secondary text-white" data-bs-dismiss="modal">Continue Browsing</button>
+                        <button type="button" class="btn btn-gold" onclick="checkout()"><i class="fa-solid fa-credit-card me-1"></i> Checkout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
     <footer>
-        &copy; 2026 Online Book Store • Built with Python, Django & AI
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="navbar-brand-custom mb-3"><i class="fa-solid fa-book-open me-2"></i>ONLINE BOOK STORE</h5>
+                    <p class="text-muted small lh-lg">
+                        Step into a carefully curated midnight sanctuary designed for literary discoverers. Online Book Store delivers premium intellectual readings, elegant layouts, and dynamic AI-powered summarizations for a modern literary experience.
+                    </p>
+                </div>
+                
+                <div class="col-lg-4 col-md-6">
+                    <h6 class="text-white mb-3 font-serif">Quick Navigation</h6>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><a href="#" onclick="filterCategory('all');" class="text-muted text-decoration-none">Home Landing</a></li>
+                        <li class="mb-2"><a href="#catalog" onclick="filterCategory('all');" class="text-muted text-decoration-none">All Catalogs</a></li>
+                        <li class="mb-2"><a href="#audiobooks" onclick="filterCategory('audiobook');" class="text-muted text-decoration-none">Audiobooks</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <h6 class="text-white mb-3 font-serif">Join Our Newsletter</h6>
+                    <p class="text-muted small mb-3">Subscribe to receive exclusive monthly selections, member discounts, and fresh literary publications.</p>
+                    <form onsubmit="subscribeNewsletter(event)" class="d-flex gap-2">
+                        <input type="email" id="newsEmail" class="form-control form-control-custom" placeholder="your@email.com" required>
+                        <button type="submit" class="btn btn-gold px-3"><i class="fa-solid fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+            <hr class="my-4 border-secondary opacity-25">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start">
+                    <span class="text-muted small">&copy; 2026 Online Book Store. All rights reserved.</span>
+                </div>
+                <div class="col-md-6 text-center text-md-end mt-2 mt-md-0">
+                    <span class="text-muted small">Powered by Django & Google Gemini API</span>
+                </div>
+            </div>
+        </div>
     </footer>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Interactive Store Script -->
+    <script>
+        // Book Catalog Data
+        const books = [
+            {
+                id: 1,
+                title: "The Midnight Odyssey",
+                author: "Arthur Pendelton",
+                category: "Fiction",
+                price: 14.99,
+                is_best_seller: true,
+                is_new_arrival: false,
+                is_audiobook: false,
+                summary: "An atmospheric, highly poetic journey through a subterranean library where books are treated as living, breathing elements. Silas maps out forgotten archives while dodge whispering shadows in this masterclass of literary fantasy."
+            },
+            {
+                id: 2,
+                title: "Architectures of Infinity",
+                author: "Sarah Connor",
+                category: "Technology & Sci-Fi",
+                price: 24.99,
+                is_best_seller: false,
+                is_new_arrival: true,
+                is_audiobook: false,
+                summary: "A deep dive into structural scaling, quantum computing paradigms, and baseline architectures of super-intelligent systems. Strips away complex jargon into practical visual paradigms for engineers."
+            },
+            {
+                id: 3,
+                title: "Lyrical Echoes",
+                author: "Emily Bronte",
+                category: "Fiction",
+                price: 12.50,
+                is_best_seller: false,
+                is_new_arrival: true,
+                is_audiobook: false,
+                summary: "A collection of beautiful, melancholic short stories centered around life on remote northern moors, weaving natural symbolism and intense emotional depth."
+            },
+            {
+                id: 4,
+                title: "Deep Learning Sandbox",
+                author: "Dr. Julian Vance",
+                category: "Technology & Sci-Fi",
+                price: 39.99,
+                is_best_seller: true,
+                is_new_arrival: true,
+                is_audiobook: false,
+                summary: "Hands-on engineering playbook detailing neural networks, reinforcement loops, and natural language transformers with practical code snippets and optimization blueprints."
+            },
+            {
+                id: 5,
+                title: "The Echoing Sea",
+                author: "Captain Gabriel Stone",
+                category: "Fiction",
+                price: 19.99,
+                is_best_seller: false,
+                is_new_arrival: false,
+                is_audiobook: true,
+                audio_url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+                summary: "A riveting adventure detailing the isolated life of a lightkeeper who hears mysterious signals on a forgotten radio frequency, drawing him into an oceanic enigma."
+            },
+            {
+                id: 6,
+                title: "Building Quantum Minds",
+                author: "Linus Turing",
+                category: "Technology & Sci-Fi",
+                price: 45.00,
+                is_best_seller: true,
+                is_new_arrival: false,
+                is_audiobook: true,
+                audio_url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+                summary: "Theoretical exploration combining organic synapses with silicon quantum gates, charting a clear mathematical course toward artificial generalized intelligence."
+            },
+            {
+                id: 7,
+                title: "Mastering Django Core",
+                author: "Andrew Django",
+                category: "Education & Learning",
+                price: 29.99,
+                is_best_seller: false,
+                is_new_arrival: false,
+                is_audiobook: false,
+                summary: "Exhaustive guide covering advanced Django routing, custom middleware, ORM database optimization, and high-security deployment standards."
+            },
+            {
+                id: 8,
+                title: "Memoirs of a Codebreaker",
+                author: "Ada Lovelace",
+                category: "Biography & Memoirs",
+                price: 18.50,
+                is_best_seller: true,
+                is_new_arrival: false,
+                is_audiobook: false,
+                summary: "Historic narrative detailing Lovelace's correspondence with Babbage, her mathematical breakthroughs, and laying down the philosophical foundations of software."
+            }
+        ];
+
+        let cart = {};
+
+        function renderBooks(filterCat = 'all', searchQuery = '') {
+            const bestGrid = document.getElementById('bestsellersGrid');
+            const newGrid = document.getElementById('newArrivalsGrid');
+            const audioGrid = document.getElementById('audiobooksGrid');
+
+            bestGrid.innerHTML = '';
+            newGrid.innerHTML = '';
+            audioGrid.innerHTML = '';
+
+            let filtered = books.filter(b => {
+                const matchCat = (filterCat === 'all') || 
+                                 (filterCat === 'audiobook' && b.is_audiobook) || 
+                                 (b.category === filterCat);
+                const matchQuery = !searchQuery || 
+                                   b.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                   b.author.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchCat && matchQuery;
+            });
+
+            filtered.forEach(book => {
+                const cardHtml = createBookCardHtml(book);
+                if (book.is_best_seller) bestGrid.innerHTML += cardHtml;
+                if (book.is_new_arrival) newGrid.innerHTML += cardHtml;
+                if (book.is_audiobook) audioGrid.innerHTML += cardHtml;
+            });
+
+            if (!bestGrid.innerHTML) bestGrid.innerHTML = '<div class="col-12 text-muted text-center py-4">No matching best seller titles.</div>';
+            if (!newGrid.innerHTML) newGrid.innerHTML = '<div class="col-12 text-muted text-center py-4">No matching new release titles.</div>';
+            if (!audioGrid.innerHTML) audioGrid.innerHTML = '<div class="col-12 text-muted text-center py-4">No matching audiobooks found.</div>';
+        }
+
+        function createBookCardHtml(book) {
+            return `
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="glass-card h-100 d-flex flex-column p-3">
+                        <div class="book-cover-wrapper mb-3" onclick="openBookModal(${book.id})" style="cursor: pointer;">
+                            <div class="book-cover-fallback">
+                                <span class="book-cover-fallback-title">${book.title}</span>
+                                <span class="book-cover-fallback-author">By ${book.author}</span>
+                            </div>
+                            ${book.is_audiobook ? `
+                                <div class="position-absolute bottom-0 end-0 m-2">
+                                    <span class="badge bg-dark border border-secondary text-info p-2 rounded-circle">
+                                        <i class="fa-solid fa-headphones"></i>
+                                    </span>
+                                </div>
+                            ` : ''}
+                        </div>
+                        <h5 class="text-white fs-6 mb-1 text-truncate font-serif">
+                            <a href="#" onclick="openBookModal(${book.id}); return false;" class="text-white text-decoration-none">${book.title}</a>
+                        </h5>
+                        <p class="text-muted small mb-2 text-truncate">By ${book.author}</p>
+                        ${book.is_audiobook && book.audio_url ? `
+                            <audio controls class="w-100 mb-2" style="height: 30px;">
+                                <source src="${book.audio_url}" type="audio/mp3">
+                            </audio>
+                        ` : ''}
+                        <div class="d-flex justify-content-between align-items-center mt-auto pt-2 border-top border-secondary">
+                            <span class="fw-bold text-white fs-5">$${book.price.toFixed(2)}</span>
+                            <div class="d-flex gap-1">
+                                <button class="btn btn-gold btn-sm" onclick="openBookModal(${book.id})"><i class="fa-solid fa-wand-magic-sparkles"></i> AI</button>
+                                <button class="btn btn-indigo btn-sm" onclick="addToCart(${book.id})"><i class="fa-solid fa-cart-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function filterCategory(cat, element = null) {
+            if (element) {
+                document.querySelectorAll('.category-pill').forEach(el => el.classList.remove('active'));
+                element.classList.add('active');
+            }
+            renderBooks(cat, document.getElementById('searchInput').value);
+        }
+
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value;
+            const activePill = document.querySelector('.category-pill.active');
+            const activeCategory = activePill ? activePill.innerText : 'all';
+            renderBooks(activeCategory === 'All Dimensions' ? 'all' : activeCategory, query);
+        }
+
+        function openBookModal(bookId) {
+            const book = books.find(b => b.id === bookId);
+            if (!book) return;
+
+            document.getElementById('modalTitle').innerText = book.title;
+            document.getElementById('modalAuthor').innerText = book.author;
+            document.getElementById('modalDetailTitle').innerText = book.title;
+            document.getElementById('modalDetailAuthor').innerText = book.author;
+            document.getElementById('modalCategory').innerText = book.category;
+            document.getElementById('modalPrice').innerText = '$' + book.price.toFixed(2);
+            document.getElementById('modalAISummary').innerText = book.summary;
+            
+            document.getElementById('modalAddCartBtn').onclick = () => {
+                addToCart(book.id);
+                bootstrap.Modal.getInstance(document.getElementById('bookModal')).hide();
+            };
+
+            const modal = new bootstrap.Modal(document.getElementById('bookModal'));
+            modal.show();
+        }
+
+        function addToCart(bookId) {
+            const book = books.find(b => b.id === bookId);
+            if (!book) return;
+
+            if (cart[bookId]) {
+                cart[bookId].qty += 1;
+            } else {
+                cart[bookId] = { ...book, qty: 1 };
+            }
+
+            updateCartUI();
+            showToast(`Added "${book.title}" to cart!`);
+        }
+
+        function updateCartUI() {
+            let totalQty = 0;
+            let totalPrice = 0;
+            const cartBody = document.getElementById('cartModalBody');
+            
+            let html = '<div class="table-responsive"><table class="table table-dark table-hover align-middle"><thead><tr><th>Book</th><th>Price</th><th>Qty</th><th>Subtotal</th><th>Action</th></tr></thead><tbody>';
+
+            for (let id in cart) {
+                const item = cart[id];
+                const subtotal = item.price * item.qty;
+                totalQty += item.qty;
+                totalPrice += subtotal;
+
+                html += `
+                    <tr>
+                        <td>
+                            <strong class="font-serif text-white d-block">${item.title}</strong>
+                            <small class="text-muted">By ${item.author}</small>
+                        </td>
+                        <td>$${item.price.toFixed(2)}</td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <button class="btn btn-sm btn-outline-secondary text-white py-0 px-2" onclick="changeQty(${item.id}, -1)">-</button>
+                                <span>${item.qty}</span>
+                                <button class="btn btn-sm btn-outline-secondary text-white py-0 px-2" onclick="changeQty(${item.id}, 1)">+</button>
+                            </div>
+                        </td>
+                        <td class="fw-bold text-warning">$${subtotal.toFixed(2)}</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-danger" onclick="removeFromCart(${item.id})"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            }
+
+            html += '</tbody></table></div>';
+
+            if (totalQty === 0) {
+                cartBody.innerHTML = '<div class="text-center py-5 text-muted"><i class="fa-solid fa-basket-shopping fs-1 mb-3"></i><p>Your cart is empty.</p></div>';
+            } else {
+                cartBody.innerHTML = html;
+            }
+
+            document.getElementById('cartCount').innerText = totalQty;
+            document.getElementById('cartTotalDisplay').innerText = '$' + totalPrice.toFixed(2);
+        }
+
+        function changeQty(id, delta) {
+            if (cart[id]) {
+                cart[id].qty += delta;
+                if (cart[id].qty <= 0) delete cart[id];
+                updateCartUI();
+            }
+        }
+
+        function removeFromCart(id) {
+            delete cart[id];
+            updateCartUI();
+            showToast("Item removed from cart.");
+        }
+
+        function checkout() {
+            if (Object.keys(cart).length === 0) {
+                showToast("Your cart is empty!");
+                return;
+            }
+            cart = {};
+            updateCartUI();
+            bootstrap.Modal.getInstance(document.getElementById('cartModal')).hide();
+            showToast("Order placed successfully! Thank you for reading with us.");
+        }
+
+        function showToast(msg) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast show align-items-center text-white bg-dark border border-secondary shadow-lg mb-2';
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body"><i class="fa-solid fa-circle-check text-warning me-2"></i> ${msg}</div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" onclick="this.parentElement.parentElement.remove()"></button>
+                </div>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        }
+
+        function subscribeNewsletter(e) {
+            e.preventDefault();
+            const email = document.getElementById('newsEmail').value;
+            showToast(`Subscribed ${email} to monthly literary digest!`);
+            document.getElementById('newsEmail').value = '';
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderBooks();
+            updateCartUI();
+        });
+    </script>
 </body>
 </html>
